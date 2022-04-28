@@ -9,7 +9,7 @@ public class InitScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Global.session = new GSession(3);
+        Global.session = new GSession(10);
 
         SceneManager.LoadSceneAsync(nameof(MainScene), LoadSceneMode.Single);
     }

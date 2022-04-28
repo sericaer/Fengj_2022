@@ -34,6 +34,11 @@ namespace Maths.Hex
             return Add(AxialCoordinate.Direction(direction));
         }
 
+        public IEnumerable<AxialCoordinate> GetNeighbors()
+        {
+            return directions.Select(x => Add(x));
+        }
+
         public AxialCoordinate Add(AxialCoordinate b)
         {
             return new AxialCoordinate(q + b.q, r + b.r);
@@ -78,6 +83,42 @@ namespace Maths.Hex
         {
             var range = Enumerable.Range(0, size+1);
             return range.Select(x => GetRing(x)).SelectMany(y => y);
+        }
+
+        public static bool operator == (AxialCoordinate left, AxialCoordinate right)
+        {
+            if (object.ReferenceEquals(left, null))
+            {
+                return object.ReferenceEquals(right, null);
+            }
+
+            return left.Equals(right);
+        }
+
+        public static bool operator != (AxialCoordinate left, AxialCoordinate right)
+        {
+            return !(left == right);
+        }
+
+        public override string ToString()
+        {
+            return $"({q}, {r})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as AxialCoordinate;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return (other.q == this.q && other.r == this.r);
+        }
+
+        public override int GetHashCode()
+        {
+            return q * 10000 + r;
         }
     }
 }

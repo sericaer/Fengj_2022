@@ -2,15 +2,21 @@
 
 namespace Fengj.Maps
 {
-    public class Cell
+    public partial class Cell
     {
+
         public readonly AxialCoordinate axialCoordinate;
         public readonly OffsetCoordinate offsetCoordinate;
 
-        public Cell(AxialCoordinate axialCoordinate)
+        LandForm landForm;
+
+        public Cell(AxialCoordinate axialCoordinate, LandForm landForm)
         {
             this.axialCoordinate = axialCoordinate;
+            this.landForm = landForm;
+
             offsetCoordinate = axialCoordinate.ToOffset();
+
         }
     }
 }
