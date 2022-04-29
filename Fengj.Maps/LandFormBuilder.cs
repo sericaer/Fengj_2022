@@ -12,13 +12,16 @@ namespace Fengj.Maps
             var dict = new Dictionary<AxialCoordinate, LandForm>();
 
             BuildWater(axialCoords, ref dict);
-
+            foreach(var axialCoord in axialCoords.Except(dict.Keys))
+            {
+                dict.Add(axialCoord, LandForm.Plain);
+            }
             return dict;
         }
 
         private static void BuildWater(IEnumerable<AxialCoordinate> axialCoords, ref Dictionary<AxialCoordinate, LandForm> dict)
         {
-            float[] random = { 0.01f, 0.1f, 0.15f, 0.3f, 0.5f, 0.9f };
+            float[] random = { 1f, 0.1f, 0.15f, 0.3f, 0.5f, 0.9f };
 
             BuildLandForm(axialCoords, ref dict, LandForm.Water, random);
         }
@@ -28,10 +31,10 @@ namespace Fengj.Maps
 
             var local = dict;
 
-            var iterCount = 100;
+            var iterCount = 1;
             for(int i=0; i< iterCount; i++)
             {
-                var emptyAxialCoords = axialCoords.Except(dict.Keys);
+                var emptyAxialCoords = axialCoords.Except(dict.Keys).ToArray();
 
                 foreach (var axialCoord in emptyAxialCoords)
                 {
@@ -54,9 +57,9 @@ namespace Fengj.Maps
 
         internal static bool IsPercentOccur(float percent)
         {
-            int labelNum = (int)(percent * 10000);
+            int labelNum = (int)Math.Ceiling(percent * 10000);
 
-            int randomNum = rand.Next(0, 10000) + 1;
+            int randomNum = rand.Next(0, 10000);
 
             return randomNum <= labelNum;
         }
