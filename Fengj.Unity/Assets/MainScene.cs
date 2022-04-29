@@ -10,7 +10,7 @@ public class MainScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        mapCamera.orthographicSize = 50;
     }
 
     // Update is called once per frame
