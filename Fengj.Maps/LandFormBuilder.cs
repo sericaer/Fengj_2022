@@ -16,10 +16,11 @@ namespace Fengj.Maps
             }
 
             BuildWater(ref dict, landFormPercent[LandForm.Water]);
-            //foreach (var axialCoord in axialCoords.Except(dict.Keys))
-            //{
-            //    dict.Add(axialCoord, LandForm.Plain);
-            //}
+            foreach (var pair in dict.Where(x=>x.Value == null).ToArray())
+            {
+                dict[pair.Key] = LandForm.Plain;
+            }
+
             return dict.Where(p => p.Value != null).ToDictionary(p => p.Key, p => p.Value.Value);
         }
 

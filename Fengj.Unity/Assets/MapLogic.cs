@@ -1,3 +1,4 @@
+using Fengj.Maps;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,12 @@ public class MapLogic : MonoBehaviour
 
     public Tile tile;
 
+    public static Dictionary<LandForm, Color> dictColor = new Dictionary<LandForm, Color>()
+    {
+        { LandForm.Plain, Color.green },
+        { LandForm.Water, Color.blue },
+    };
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +23,11 @@ public class MapLogic : MonoBehaviour
 
         foreach (var cell in Global.session.map.cells)
         {
-            tilemap.SetTile(cell.offsetCoordinate.ToHexCoordinate(), tile);
+            var hexCoord = cell.offsetCoordinate.ToHexCoordinate();
+            tilemap.SetTile(hexCoord, tile);
+            tilemap.SetTileFlags(hexCoord, TileFlags.None);
+
+            tilemap.SetColor(hexCoord, dictColor[cell.landForm]);
         }
     }
 
@@ -28,8 +39,9 @@ public class MapLogic : MonoBehaviour
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int gridPos = tilemap.WorldToCell(mousePos);
 
+            
             //if (tilemap.HasTile(gridPos))
-                Debug.Log("Hello World from " + gridPos);
+            Debug.Log("Hello World from " + gridPos);
         }
     }
 }
