@@ -8,7 +8,7 @@ namespace Fengj.GSessions
     {
         public Map map { get; set; }
 
-        public GSession(int mapSize)
+        public GSession(MapInit mapInit)
         {
             //map = new Map();
             //map.cells.AddRange( new Cell[] { 
@@ -20,7 +20,7 @@ namespace Fengj.GSessions
             //    new Cell(new AxialCoordinate(-1, 1)),
             //    new Cell(new AxialCoordinate(-1, 0)),
             //});
-            map = MapBuilder.Build(mapSize);
+            map = MapBuilder.Build(mapInit);
         }
     }
 }

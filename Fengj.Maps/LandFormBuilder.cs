@@ -7,47 +7,52 @@ namespace Fengj.Maps
 {
     internal class LandFormBuilder
     {
-        internal static Dictionary<AxialCoordinate, LandForm> Build(IEnumerable<AxialCoordinate> axialCoords)
+        internal static Dictionary<AxialCoordinate, LandForm> Build(IEnumerable<AxialCoordinate> axialCoords, Dictionary<LandForm, int> landFormPercent)
         {
             var dict = new Dictionary<AxialCoordinate, LandForm>();
 
-            BuildWater(axialCoords, ref dict);
-            foreach(var axialCoord in axialCoords.Except(dict.Keys))
-            {
-                dict.Add(axialCoord, LandForm.Plain);
-            }
+            BuildWater(axialCoords, ref dict, landFormPercent[LandForm.Water]);
+            //foreach (var axialCoord in axialCoords.Except(dict.Keys))
+            //{
+            //    dict.Add(axialCoord, LandForm.Plain);
+            //}
             return dict;
         }
 
-        private static void BuildWater(IEnumerable<AxialCoordinate> axialCoords, ref Dictionary<AxialCoordinate, LandForm> dict)
+        private static void BuildWater(IEnumerable<AxialCoordinate> axialCoords, ref Dictionary<AxialCoordinate, LandForm> dict, int percent)
         {
-            float[] random = { 1f, 0.1f, 0.15f, 0.3f, 0.5f, 0.9f };
+            float[] random = { 0.001f, 0.1f, 0.2f, 0.3f, 0.5f, 0.7f, 0.9f };
 
-            BuildLandForm(axialCoords, ref dict, LandForm.Water, random);
+            BuildLandForm(axialCoords, ref dict, LandForm.Water, random, percent);
         }
 
-        private static void BuildLandForm(IEnumerable<AxialCoordinate> axialCoords, ref Dictionary<AxialCoordinate, LandForm> dict, LandForm landForm, float[] randoms)
+        private static void BuildLandForm(IEnumerable<AxialCoordinate> axialCoords, ref Dictionary<AxialCoordinate, LandForm> dict, LandForm landForm, float[] randoms, int percent)
         {
 
             var local = dict;
 
-            var iterCount = 1;
-            for(int i=0; i< iterCount; i++)
+            while(true)
             {
-                var emptyAxialCoords = axialCoords.Except(dict.Keys).ToArray();
+                var emptyAxialCoords = axialCoords.Except(local.Keys).ToArray();
 
                 foreach (var axialCoord in emptyAxialCoords)
                 {
-                    var neighbors = axialCoord.GetNeighbors();
-                    var count = neighbors.Count(x => local.ContainsKey(x) && local[x] == landForm);
-                    var random = randoms[count] / iterCount;
+                    var neighborCount = axialCoord.GetNeighbors().Count(n => local.ContainsKey(n) && local[n] == landForm);
 
-                    if(GRandom.IsPercentOccur(random))
+                    if (!GRandom.IsPercentOccur(randoms[neighborCount]))
                     {
-                        dict.Add(axialCoord, landForm);
+                        continue;
+                    }
+
+                    local.Add(axialCoord, landForm);
+
+                    if (local.Values.Count(x => x == landForm) == percent * axialCoords.Count() / 100)
+                    {
+                        return;
                     }
                 }
             }
+
         }
     }
 
@@ -57,11 +62,15 @@ namespace Fengj.Maps
 
         internal static bool IsPercentOccur(float percent)
         {
-            int labelNum = (int)Math.Ceiling(percent * 10000);
+            float labelNum = percent * 10000;
+            if(labelNum < 1)
+            {
+                return false;
+            }
 
-            int randomNum = rand.Next(0, 10000);
+            float randomNum = rand.Next(0, 10000);
 
-            return randomNum <= labelNum;
+            return !(randomNum - labelNum > 0f);
         }
     }
 }

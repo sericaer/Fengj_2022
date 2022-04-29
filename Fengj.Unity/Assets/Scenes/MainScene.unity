@@ -423,7 +423,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1706909324}
   tile: {fileID: 11400000, guid: e5a7c160a54645f4d8198719897be225, type: 2}
-  mapCamera: {fileID: 519420031}
 --- !u!1 &1621158392
 GameObject:
   m_ObjectHideFlags: 0

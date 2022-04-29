@@ -12,7 +12,9 @@ public class MapLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach(var cell in Global.session.map.cells)
+        tilemap.ClearAllTiles();
+
+        foreach (var cell in Global.session.map.cells)
         {
             tilemap.SetTile(cell.offsetCoordinate.ToHexCoordinate(), tile);
         }

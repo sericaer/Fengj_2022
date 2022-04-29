@@ -9,4 +9,10 @@ namespace Fengj.Maps
 
         public List<Cell> cells = new List<Cell>();
     }
+
+    public class MapInit
+    {
+        public int size;
+        public Dictionary<LandForm, int> landFormPercent;
+    }
 }

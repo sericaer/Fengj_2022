@@ -8,7 +8,7 @@ namespace Fengj.Maps
         public readonly AxialCoordinate axialCoordinate;
         public readonly OffsetCoordinate offsetCoordinate;
 
-        LandForm landForm;
+        public readonly LandForm landForm;
 
         public Cell(AxialCoordinate axialCoordinate, LandForm landForm)
         {
