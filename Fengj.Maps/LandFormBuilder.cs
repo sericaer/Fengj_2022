@@ -16,8 +16,9 @@ namespace Fengj.Maps
             }
 
             BuildWater(ref dict, landFormPercent[LandForm.Water]);
-            BuildHill(ref dict, landFormPercent[LandForm.Hill]);
-            BuildMount(ref dict);
+            BuildHill(ref dict, landFormPercent[LandForm.Hill] + landFormPercent[LandForm.Mount]);
+            BuildMount(ref dict, landFormPercent[LandForm.Mount]);
+            BuildMarsh(ref dict, landFormPercent[LandForm.Marsh]);
 
             foreach (var pair in dict.Where(x=>x.Value == null).ToArray())
             {
@@ -27,27 +28,51 @@ namespace Fengj.Maps
             return dict.Where(p => p.Value != null).ToDictionary(p => p.Key, p => p.Value.Value);
         }
 
-        private static void BuildMount(ref Dictionary<AxialCoordinate, LandForm?> dict)
+        private static void BuildMarsh(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent)
         {
             var local = dict;
 
-            var emptyAxialCoords = local.Keys.Where(k => local[k] == LandForm.Hill).ToArray();
-
-            var hillCount = emptyAxialCoords.Count();
-
-            while(true)
+            while (true)
             {
-                var groups = emptyAxialCoords.GroupBy(x => x.GetNeighbors().Count(n => local.ContainsKey(n) && local[n] == LandForm.Hill));
-                foreach (var group in groups.OrderByDescending(x => x.Key))
-                {
-                    foreach(var axialCoord in group)
-                    {
-                        local[axialCoord] = LandForm.Mount;
+                var waterAxialCoords = local.Keys.Where(k => local[k] == LandForm.Water || local[k] == LandForm.Marsh).ToArray();
 
-                        if (local.Values.Count(x => x == LandForm.Mount) == hillCount * 20 / 100)
+                foreach (var axialCoord in waterAxialCoords.SelectMany(w => w.GetNeighbors().Where(n => local.ContainsKey(n) && local[n] == null)))
+                {
+                    if(axialCoord.GetNeighbors().Any(x=> local.ContainsKey(x) && (local[x] == LandForm.Hill || local[x] == LandForm.Mount)))
+                    {
+                        continue;
+                    }
+
+                    if (GRandom.IsPercentOccur(1))
+                    {
+                        local[axialCoord] = LandForm.Marsh;
+
+                        if (local.Values.Count(x => x == LandForm.Marsh) == percent* local.Count() / 100)
                         {
                             return;
                         }
+                    }
+                }
+            }
+
+        }
+
+        private static void BuildMount(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent)
+        {
+            var local = dict;
+
+            var HillAxialCoords = local.Keys.Where(k => local[k] == LandForm.Hill).ToArray();
+
+            while(true)
+            {
+                var groups = HillAxialCoords.GroupBy(x => x.GetNeighbors().Count(n => local.ContainsKey(n) && local[n] == LandForm.Hill));
+                foreach (var axialCoord in groups.OrderByDescending(x => x.Key).SelectMany(x=>x))
+                {
+                    local[axialCoord] = LandForm.Mount;
+
+                    if (local.Values.Count(x => x == LandForm.Mount) == percent * local.Count() / 100)
+                    {
+                        return;
                     }
 
                 }

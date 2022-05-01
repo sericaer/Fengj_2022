@@ -15,10 +15,13 @@ public class InitScene : MonoBehaviour
         var mapInit = new MapInit()
         {
             size = 50,
+
             landFormPercent = new Dictionary<LandForm, int>()
             {
                 { LandForm.Water, 10 },
-                { LandForm.Hill, 10 }
+                { LandForm.Marsh, 2 },
+                { LandForm.Hill, 10 },
+                { LandForm.Mount, 1 },
             }
         };
 

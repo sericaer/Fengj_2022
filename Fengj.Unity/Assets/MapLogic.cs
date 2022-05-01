@@ -16,6 +16,7 @@ public class MapLogic : MonoBehaviour
         { LandForm.Hill, Color.yellow },
         { LandForm.Water, Color.blue },
         { LandForm.Mount, new Color(128/255f, 0, 128/255f) },
+        { LandForm.Marsh, new Color(95/255f, 158/255f, 160/255f) },
     };
 
     // Start is called before the first frame update
