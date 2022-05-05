@@ -7,18 +7,21 @@ namespace Fengj.Maps
 {
     internal class LandFormBuilder
     {
-        internal static Dictionary<AxialCoordinate, LandForm> Build(IEnumerable<AxialCoordinate> axialCoords, Dictionary<LandForm, int> landFormPercent)
+        internal static Dictionary<AxialCoordinate, LandForm> Build(MapInit init, AxialCoordinate[] rivers)
         {
             var dict = new Dictionary<AxialCoordinate, LandForm?>();
-            foreach(var axialCoord in axialCoords.OrderBy(_=> GRandom.Get()))
+            foreach(var axialCoord in HexBuilder.Build(init.size).OrderBy(_=>GRandom.Get()))
             {
                 dict.Add(axialCoord, null);
             }
 
-            BuildWater(ref dict, landFormPercent[LandForm.Water]);
-            BuildHill(ref dict, landFormPercent[LandForm.Hill] + landFormPercent[LandForm.Mount]);
-            BuildMount(ref dict, landFormPercent[LandForm.Mount]);
-            BuildMarsh(ref dict, landFormPercent[LandForm.Marsh]);
+            var riverBank = rivers.SelectMany(x => x.GetRiverBank(init.size)).Distinct().ToArray();
+            var waterSeeds = riverBank.OrderBy(_ => GRandom.Get()).Take(5).ToArray();
+
+            BuildWater(ref dict, init.landFormPercent[LandForm.Water], waterSeeds);
+            BuildHill(ref dict, init.landFormPercent[LandForm.Hill] + init.landFormPercent[LandForm.Mount]);
+            BuildMount(ref dict, init.landFormPercent[LandForm.Mount], riverBank);
+            BuildMarsh(ref dict, init.landFormPercent[LandForm.Marsh], riverBank);
 
             foreach (var pair in dict.Where(x=>x.Value == null).ToArray())
             {
@@ -28,13 +31,13 @@ namespace Fengj.Maps
             return dict.Where(p => p.Value != null).ToDictionary(p => p.Key, p => p.Value.Value);
         }
 
-        private static void BuildMarsh(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent)
+        private static void BuildMarsh(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent, AxialCoordinate[] riverBank)
         {
             var local = dict;
 
             while (true)
             {
-                var waterAxialCoords = local.Keys.Where(k => local[k] == LandForm.Water || local[k] == LandForm.Marsh).ToArray();
+                var waterAxialCoords = local.Keys.Where(k => local[k] == LandForm.Water || local[k] == LandForm.Marsh || riverBank.Contains(k)).ToArray();
 
                 foreach (var axialCoord in waterAxialCoords.SelectMany(w => w.GetNeighbors().Where(n => local.ContainsKey(n) && local[n] == null)))
                 {
@@ -57,11 +60,11 @@ namespace Fengj.Maps
 
         }
 
-        private static void BuildMount(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent)
+        private static void BuildMount(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent, AxialCoordinate[] riverBank)
         {
             var local = dict;
 
-            var HillAxialCoords = local.Keys.Where(k => local[k] == LandForm.Hill).ToArray();
+            var HillAxialCoords = local.Keys.Where(k => local[k] == LandForm.Hill && !riverBank.Contains(k)).ToArray();
 
             while(true)
             {
@@ -82,14 +85,19 @@ namespace Fengj.Maps
 
         private static void BuildHill(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent)
         {
-            float[] random = { 0.001f, 0.8f, 0.6f, 0.3f, 0.3f, 0.6f, 0.8f };
+            float[] random = { 0.01f, 0.8f, 0.6f, 0.3f, 0.3f, 0.6f, 0.8f };
 
             BuildLandForm(ref dict, LandForm.Hill, random, percent);
         }
 
-        private static void BuildWater(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent)
+        private static void BuildWater(ref Dictionary<AxialCoordinate, LandForm?> dict, int percent, AxialCoordinate[] waterSeeds)
         {
-            float[] random = { 0.0005f, 0.3f, 0.5f, 0.5f, 0.7f, 0.8f, 0.9f };
+            float[] random = { 0.001f, 0.1f, 0.5f, 0.5f, 0.7f, 0.8f, 0.9f };
+
+            foreach(var waterSeed in waterSeeds)
+            {
+                dict[waterSeed] = LandForm.Water;
+            }
 
             BuildLandForm(ref dict, LandForm.Water, random, percent);
         }

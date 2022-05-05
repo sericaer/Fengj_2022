@@ -9,11 +9,13 @@ namespace Maths.Hex
     {
         public readonly int q;
         public readonly int r;
+        public readonly int s;
 
         public AxialCoordinate(int q, int r)
         {
             this.q = q;
             this.r = r;
+            this.s = 0 - (q + r);
         }
 
         static public List<AxialCoordinate> directions = new List<AxialCoordinate> { 

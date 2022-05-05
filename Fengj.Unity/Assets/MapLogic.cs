@@ -1,4 +1,5 @@
 using Fengj.Maps;
+using Maths.Hex;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine.Tilemaps;
 public class MapLogic : MonoBehaviour
 {
     public Tilemap tilemap;
+    public Tilemap tileRivers;
 
     public Tile tile;
 
@@ -31,6 +33,15 @@ public class MapLogic : MonoBehaviour
             tilemap.SetTileFlags(hexCoord, TileFlags.None);
 
             tilemap.SetColor(hexCoord, dictColor[cell.landForm]);
+        }
+
+        foreach (var river in Global.session.map.rivers)
+        {
+            var hexCoord = river.ToOffset().ToHexCoordinate();
+            tileRivers.SetTile(hexCoord, tile);
+            tileRivers.SetTileFlags(hexCoord, TileFlags.None);
+
+            tileRivers.SetColor(hexCoord, dictColor[LandForm.Water]);
         }
     }
 

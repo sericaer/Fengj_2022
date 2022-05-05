@@ -10,11 +10,12 @@ namespace Fengj.Maps
     {
         public static Map Build(MapInit mapInit)
         {
-            var axialCoords = HexBuilder.Build(mapInit.size).ToArray();
-            var dictLandForm = LandFormBuilder.Build(axialCoords, mapInit.landFormPercent);
+            var rivers = RiverBuilder.Build(mapInit.size);
+            var dictLandForm = LandFormBuilder.Build(mapInit, rivers);
 
             var map = new Map();
             map.cells.AddRange(dictLandForm.Select(pair => new Cell(pair.Key, pair.Value)));
+            map.rivers.AddRange(rivers);
 
             return map;
         }
