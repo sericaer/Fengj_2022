@@ -1,22 +1,19 @@
 ﻿using Maths.Hex;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Fengj.Maps
 {
-    public class Cell
+    public class RiverCell
     {
-
         public readonly AxialCoordinate axialCoordinate;
         public readonly OffsetCoordinate offsetCoordinate;
 
-        public readonly LandForm landForm;
-
-        public Cell(AxialCoordinate axialCoordinate, LandForm landForm)
+        public RiverCell(AxialCoordinate axialCoordinate)
         {
             this.axialCoordinate = axialCoordinate;
-            this.landForm = landForm;
-
             offsetCoordinate = axialCoordinate.ToOffset();
-
         }
     }
 }

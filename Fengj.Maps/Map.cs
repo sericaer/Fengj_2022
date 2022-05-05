@@ -7,14 +7,15 @@ namespace Fengj.Maps
     public class Map
     {
         public static Map inst;
+        public static Action<TerranCell> onViewTypeChanged;
 
-        public List<Cell> cells = new List<Cell>();
-        public List<River> rivers = new List<River>();
+        public List<TerranCell> terranCells = new List<TerranCell>();
+        public List<RiverCell> riverCells = new List<RiverCell>();
     }
 
     public class MapInit
     {
         public int size;
-        public Dictionary<LandForm, int> landFormPercent;
+        public Dictionary<Terran, int> landFormPercent;
     }
 }

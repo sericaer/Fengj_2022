@@ -16,18 +16,18 @@ public class InitScene : MonoBehaviour
         {
             size = 50,
 
-            landFormPercent = new Dictionary<LandForm, int>()
+            landFormPercent = new Dictionary<Terran, int>()
             {
-                { LandForm.Water, 7 },
-                { LandForm.Marsh, 2 },
-                { LandForm.Hill, 10 },
-                { LandForm.Mount, 1 },
+                { Terran.Water, 7 },
+                { Terran.Marsh, 2 },
+                { Terran.Hill, 10 },
+                { Terran.Mount, 1 },
             }
         };
 
         Global.session = new GSession(mapInit);
 
-        Debug.Log($"landform count {Global.session.map.cells.Count()}: {string.Join(" ", Enum.GetValues(typeof(LandForm)).OfType<LandForm>().Select(e=>$"({e}, {Global.session.map.cells.Count(cell => cell.landForm == e)})"))}");
+        Debug.Log($"landform count {Global.session.map.terranCells.Count()}: {string.Join(" ", Enum.GetValues(typeof(Terran)).OfType<Terran>().Select(e=>$"({e}, {Global.session.map.terranCells.Count(cell => cell.terran == e)})"))}");
 
         SceneManager.LoadSceneAsync(nameof(MainScene), LoadSceneMode.Single);
     }

@@ -1,6 +1,6 @@
 ﻿namespace Fengj.Maps
 {
-    public enum LandForm
+    public enum Terran
     {
         Water,
         Marsh,

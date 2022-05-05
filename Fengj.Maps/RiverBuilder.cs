@@ -7,7 +7,7 @@ namespace Fengj.Maps
 {
     internal class RiverBuilder
     {
-        internal static River[] Build(int mapSize)
+        internal static RiverCell[] Build(int mapSize)
         {
             var riverMapSize = mapSize * 2 + 1;
 
@@ -16,7 +16,7 @@ namespace Fengj.Maps
             var riverInDirect1 = BuildDirect(currCoord, riverMapSize, new int[] { 0, 1, 2, 5 });
             var riverInDirect2 = BuildDirect(currCoord, riverMapSize, new int[] { 0, 3, 4, 5 });
 
-            return riverInDirect1.Concat(riverInDirect2).Select(x=>new River(x)).ToArray();
+            return riverInDirect1.Concat(riverInDirect2).Select(x=>new RiverCell(x)).ToArray();
         }
 
         private static HashSet<AxialCoordinate> BuildDirect(AxialCoordinate currCoord, int riverMapSize, int[] direct)

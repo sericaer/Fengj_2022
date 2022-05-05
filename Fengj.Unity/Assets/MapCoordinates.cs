@@ -12,7 +12,7 @@ public class MapCoordinates : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach(var cell in Global.session.map.cells)
+        foreach(var cell in Global.session.map.terranCells)
         {
             var worldPos = tileMap.CellToWorld(cell.offsetCoordinate.ToHexCoordinate());
             

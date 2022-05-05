@@ -14,8 +14,8 @@ namespace Fengj.Maps
             var dictLandForm = LandFormBuilder.Build(mapInit, rivers);
 
             var map = new Map();
-            map.cells.AddRange(dictLandForm.Select(pair => new Cell(pair.Key, pair.Value)));
-            map.rivers.AddRange(rivers);
+            map.terranCells.AddRange(dictLandForm.Select(pair => new TerranCell(pair.Key, pair.Value)));
+            map.riverCells.AddRange(rivers);
 
             return map;
         }
