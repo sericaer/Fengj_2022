@@ -11,7 +11,7 @@ namespace Fengj.Maps
         {
             var riverMapSize = mapSize * 2 + 1;
 
-            var currCoord = new AxialCoordinate(0, 0).GetSector(riverMapSize / 5).OrderBy(_ => GRandom.Get()).First();
+            var currCoord = new AxialCoordinate(0, 0).GetSector(Math.Min(riverMapSize / 5, 3)).OrderBy(_ => GRandom.Get()).First();
 
             var riverInDirect1 = BuildDirect(currCoord, riverMapSize, new int[] { 0, 1, 2, 5 });
             var riverInDirect2 = BuildDirect(currCoord, riverMapSize, new int[] { 0, 3, 4, 5 });

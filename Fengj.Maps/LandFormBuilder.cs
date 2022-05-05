@@ -9,23 +9,25 @@ namespace Fengj.Maps
     {
         internal static Dictionary<AxialCoordinate, LandForm> Build(MapInit init, AxialCoordinate[] rivers)
         {
+            var centerSector = new AxialCoordinate(0, 0).GetSector(3);
+
             var dict = new Dictionary<AxialCoordinate, LandForm?>();
-            foreach(var axialCoord in HexBuilder.Build(init.size).OrderBy(_=>GRandom.Get()))
+            foreach(var axialCoord in HexBuilder.Build(init.size).Where(x=>!centerSector.Contains(x)).OrderBy(_=>GRandom.Get()))
             {
                 dict.Add(axialCoord, null);
             }
 
             var riverBank = rivers.SelectMany(x => x.GetRiverBank(init.size)).Distinct().ToArray();
-            var waterSeeds = riverBank.OrderBy(_ => GRandom.Get()).Take(5).ToArray();
+            var waterSeeds = riverBank.OrderBy(_ => GRandom.Get()).Take(3).ToArray();
 
             BuildWater(ref dict, init.landFormPercent[LandForm.Water], waterSeeds);
             BuildHill(ref dict, init.landFormPercent[LandForm.Hill] + init.landFormPercent[LandForm.Mount]);
             BuildMount(ref dict, init.landFormPercent[LandForm.Mount], riverBank);
             BuildMarsh(ref dict, init.landFormPercent[LandForm.Marsh], riverBank);
 
-            foreach (var pair in dict.Where(x=>x.Value == null).ToArray())
+            foreach (var axialCoord in dict.Where(x=>x.Value == null).Select(x=>x.Key).Concat(centerSector).ToArray())
             {
-                dict[pair.Key] = LandForm.Plain;
+                dict[axialCoord] = LandForm.Plain;
             }
 
             return dict.Where(p => p.Value != null).ToDictionary(p => p.Key, p => p.Value.Value);
