@@ -37,7 +37,7 @@ public class MapLogic : MonoBehaviour
 
         foreach (var river in Global.session.map.rivers)
         {
-            var hexCoord = river.ToOffset().ToHexCoordinate();
+            var hexCoord = river.offsetCoordinate.ToHexCoordinate();
             tileRivers.SetTile(hexCoord, tile);
             tileRivers.SetTileFlags(hexCoord, TileFlags.None);
 

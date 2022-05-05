@@ -7,7 +7,7 @@ namespace Fengj.Maps
 {
     internal class LandFormBuilder
     {
-        internal static Dictionary<AxialCoordinate, LandForm> Build(MapInit init, AxialCoordinate[] rivers)
+        internal static Dictionary<AxialCoordinate, LandForm> Build(MapInit init, River[] rivers)
         {
             var centerSector = new AxialCoordinate(0, 0).GetSector(3);
 
@@ -17,7 +17,7 @@ namespace Fengj.Maps
                 dict.Add(axialCoord, null);
             }
 
-            var riverBank = rivers.SelectMany(x => x.GetRiverBank(init.size)).Distinct().ToArray();
+            var riverBank = rivers.SelectMany(x => x.axialCoordinate.GetRiverBank(init.size)).Distinct().ToArray();
             var waterSeeds = riverBank.OrderBy(_ => GRandom.Get()).Take(3).ToArray();
 
             BuildWater(ref dict, init.landFormPercent[LandForm.Water], waterSeeds);

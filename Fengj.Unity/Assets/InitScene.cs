@@ -18,7 +18,7 @@ public class InitScene : MonoBehaviour
 
             landFormPercent = new Dictionary<LandForm, int>()
             {
-                { LandForm.Water, 10 },
+                { LandForm.Water, 7 },
                 { LandForm.Marsh, 2 },
                 { LandForm.Hill, 10 },
                 { LandForm.Mount, 1 },

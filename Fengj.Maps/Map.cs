@@ -9,7 +9,7 @@ namespace Fengj.Maps
         public static Map inst;
 
         public List<Cell> cells = new List<Cell>();
-        public List<AxialCoordinate> rivers = new List<AxialCoordinate>();
+        public List<River> rivers = new List<River>();
     }
 
     public class MapInit
