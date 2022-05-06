@@ -7,11 +7,15 @@ namespace Fengj.Maps
 {
     internal class RiverBuilder
     {
-        internal static RiverCell[] Build(int mapSize)
+        private static GRandom _random;
+
+        internal static RiverCell[] Build(int mapSize, GRandom random)
         {
+            _random = random;
+
             var riverMapSize = mapSize * 2 + 1;
 
-            var currCoord = new AxialCoordinate(0, 0).GetSector(Math.Min(riverMapSize / 5, 3)).OrderBy(_ => GRandom.Get()).First();
+            var currCoord = new AxialCoordinate(0, 0).GetSector(Math.Min(riverMapSize / 5, 3)).OrderBy(_ => _random.Get()).First();
 
             var riverInDirect1 = BuildDirect(currCoord, riverMapSize, new int[] { 0, 1, 2, 5 });
             var riverInDirect2 = BuildDirect(currCoord, riverMapSize, new int[] { 0, 3, 4, 5 });
@@ -29,7 +33,7 @@ namespace Fengj.Maps
             {
                 var vaildNexts = direct.Select(d => currCoord.GetNeighbor(d)).ToArray();
                 currCoord = vaildNexts.Where(x => x.GetNeighbors().All(n => !(riverHashSet.Contains(n) && n != currCoord)))
-                    .OrderBy(_ => GRandom.Get()).First();
+                    .OrderBy(_ => _random.Get()).First();
 
                 if (!currCoord.IsInMap(riverMapSize))
                 {

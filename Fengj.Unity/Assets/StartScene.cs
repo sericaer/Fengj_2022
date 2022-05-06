@@ -6,11 +6,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InitScene : MonoBehaviour
+public class StartScene : MonoBehaviour
 {
+    public void OnNewGame()
+    {
+        SceneManager.LoadSceneAsync(nameof(InitScene), LoadSceneMode.Single);
+    }
 
-    // Use this for initialization
-    void Start()
+    public void OnMockGame()
     {
         var initData = new SessionInitData()
         {
@@ -27,12 +30,18 @@ public class InitScene : MonoBehaviour
                 }
             },
 
-            seed = "TEST1"
+            seed = DateTime.Now.ToString()
         };
 
         Global.session = new GSession(initData);
 
         SceneManager.LoadSceneAsync(nameof(MainScene), LoadSceneMode.Single);
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+
     }
 
     // Update is called once per frame

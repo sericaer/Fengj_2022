@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fengj.Logs\Fengj.Logs.csproj" />
     <ProjectReference Include="..\Maths.Hex\Maths.Hex.csproj" />
   </ItemGroup>
 

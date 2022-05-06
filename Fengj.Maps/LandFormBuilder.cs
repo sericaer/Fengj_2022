@@ -2,23 +2,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Fengj.Maps
 {
     internal class LandFormBuilder
     {
-        internal static Dictionary<AxialCoordinate, Terran> Build(MapInit init, RiverCell[] rivers)
+        private static GRandom _random;
+
+        internal static Dictionary<AxialCoordinate, Terran> Build(MapInit init, RiverCell[] rivers, GRandom random)
         {
+            _random = random;
+
             var centerSector = new AxialCoordinate(0, 0).GetSector(3);
 
             var dict = new Dictionary<AxialCoordinate, Terran?>();
-            foreach(var axialCoord in HexBuilder.Build(init.size).Where(x=>!centerSector.Contains(x)).OrderBy(_=>GRandom.Get()))
+            foreach(var axialCoord in HexBuilder.Build(init.size).Where(x=>!centerSector.Contains(x)).OrderBy(_=> _random.Get()))
             {
                 dict.Add(axialCoord, null);
             }
 
             var riverBank = rivers.SelectMany(x => x.axialCoordinate.GetRiverBank(init.size)).Distinct().ToArray();
-            var waterSeeds = riverBank.OrderBy(_ => GRandom.Get()).Take(3).ToArray();
+            var waterSeeds = riverBank.OrderBy(_ => _random.Get()).Take(3).ToArray();
 
             BuildWater(ref dict, init.landFormPercent[Terran.Water], waterSeeds);
             BuildHill(ref dict, init.landFormPercent[Terran.Hill] + init.landFormPercent[Terran.Mount]);
@@ -48,7 +54,7 @@ namespace Fengj.Maps
                         continue;
                     }
 
-                    if (GRandom.IsPercentOccur(1))
+                    if (_random.IsPercentOccur(1))
                     {
                         local[axialCoord] = Terran.Marsh;
 
@@ -116,7 +122,7 @@ namespace Fengj.Maps
                 {
                     var neighborCount = axialCoord.GetNeighbors().Count(n => local.ContainsKey(n) && local[n] == landForm);
 
-                    if (!GRandom.IsPercentOccur(randoms[neighborCount]))
+                    if (!_random.IsPercentOccur(randoms[neighborCount]))
                     {
                         continue;
                     }
@@ -135,14 +141,19 @@ namespace Fengj.Maps
 
     public class GRandom
     {
-        static Random rand { get; } = new Random(System.Guid.NewGuid().GetHashCode());
+        private readonly Random rand;
 
-        internal static int Get()
+        public GRandom(string seed)
+        {
+            rand = new Random(GetSeedFromString(seed));
+        }
+
+        public int Get()
         {
             return rand.Next(0, 10000);
         }
 
-        internal static bool IsPercentOccur(float percent)
+        public bool IsPercentOccur(float percent)
         {
             float labelNum = percent * 10000;
             if(labelNum < 1)
@@ -158,6 +169,18 @@ namespace Fengj.Maps
             float randomNum = rand.Next(0, 10000);
 
             return !(randomNum - labelNum > 0f);
+        }
+
+        private int GetSeedFromString(string value)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var inputBytes = Encoding.ASCII.GetBytes(value);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // FIXME: force endianness for potential different systems
+                return BitConverter.ToInt32(hashBytes, 0);
+            }
         }
     }
 }

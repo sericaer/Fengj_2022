@@ -8,19 +8,15 @@ namespace Fengj.GSessions
     {
         public Map map { get; set; }
 
-        public GSession(MapInit mapInit)
+        public GSession(SessionInitData initData)
         {
-            //map = new Map();
-            //map.cells.AddRange( new Cell[] { 
-            //    new Cell(new AxialCoordinate(0, 0)),
-            //    new Cell(new AxialCoordinate(0, -1)),
-            //    new Cell(new AxialCoordinate(1, -1)),
-            //    new Cell(new AxialCoordinate(1, 0)),
-            //    new Cell(new AxialCoordinate(0, 1)),
-            //    new Cell(new AxialCoordinate(-1, 1)),
-            //    new Cell(new AxialCoordinate(-1, 0)),
-            //});
-            map = MapBuilder.Build(mapInit);
+            map = MapBuilder.Build(initData.map, initData.seed);
         }
+    }
+
+    public class SessionInitData
+    {
+        public string seed;
+        public MapInit map;
     }
 }
