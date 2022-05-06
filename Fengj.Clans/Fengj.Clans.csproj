@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Fengj.Unity\Assets\Depends\</OutputPath>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\Fengj.Unity\Assets\Depends\</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Maths.Hex\Maths.Hex.csproj" />
+  </ItemGroup>
 
 </Project>

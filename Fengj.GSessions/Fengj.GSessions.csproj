@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fengj.Clans\Fengj.Clans.csproj" />
     <ProjectReference Include="..\Fengj.Maps\Fengj.Maps.csproj" />
   </ItemGroup>
 

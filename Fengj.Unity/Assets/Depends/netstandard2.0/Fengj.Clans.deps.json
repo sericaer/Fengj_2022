@@ -7,42 +7,19 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Fengj.GSessions/1.0.0": {
+      "Fengj.Clans/1.0.0": {
         "dependencies": {
-          "Fengj.Clans": "1.0.0",
-          "Fengj.Maps": "1.0.0",
+          "Maths.Hex": "1.0.0",
           "NETStandard.Library": "2.0.3"
         },
         "runtime": {
-          "Fengj.GSessions.dll": {}
+          "Fengj.Clans.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
       "NETStandard.Library/2.0.3": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0"
-        }
-      },
-      "Fengj.Clans/1.0.0": {
-        "dependencies": {
-          "Maths.Hex": "1.0.0"
-        },
-        "runtime": {
-          "Fengj.Clans.dll": {}
-        }
-      },
-      "Fengj.Logs/1.0.0": {
-        "runtime": {
-          "Fengj.Logs.dll": {}
-        }
-      },
-      "Fengj.Maps/1.0.0": {
-        "dependencies": {
-          "Fengj.Logs": "1.0.0",
-          "Maths.Hex": "1.0.0"
-        },
-        "runtime": {
-          "Fengj.Maps.dll": {}
         }
       },
       "Maths.Hex/1.0.0": {
@@ -53,7 +30,7 @@
     }
   },
   "libraries": {
-    "Fengj.GSessions/1.0.0": {
+    "Fengj.Clans/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -71,21 +48,6 @@
       "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
       "path": "netstandard.library/2.0.3",
       "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
-    },
-    "Fengj.Clans/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Fengj.Logs/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Fengj.Maps/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     },
     "Maths.Hex/1.0.0": {
       "type": "project",

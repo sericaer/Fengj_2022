@@ -1,4 +1,5 @@
-﻿using Fengj.GSessions;
+﻿using Fengj.Clans;
+using Fengj.GSessions;
 using Fengj.Maps;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ public class StartScene : MonoBehaviour
     {
         var initData = new SessionInitData()
         {
+            seed = DateTime.Now.ToString(),
+
             map = new MapInit()
             {
                 size = 50,
@@ -30,7 +33,26 @@ public class StartScene : MonoBehaviour
                 }
             },
 
-            seed = DateTime.Now.ToString()
+            clan = new ClanInit()
+            {
+                elements = new ClanInit.Element[]
+                {
+                    new ClanInit.Element()
+                    {
+                        name = "T1",
+                        popNum = 100,
+
+                        coordnate = new Maths.Hex.AxialCoordinate(0,0)
+                    },
+                    new ClanInit.Element()
+                    {
+                        name = "T2",
+                        popNum = 200,
+
+                        coordnate = new Maths.Hex.AxialCoordinate(0,1)
+                    }
+                }
+            }
         };
 
         Global.session = new GSession(initData);

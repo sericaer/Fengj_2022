@@ -31,8 +31,8 @@ namespace Fengj.Maps
 
             while (true)
             {
-                var vaildNexts = direct.Select(d => currCoord.GetNeighbor(d)).ToArray();
-                currCoord = vaildNexts.Where(x => x.GetNeighbors().All(n => !(riverHashSet.Contains(n) && n != currCoord)))
+                var vaildNexts = direct.Select(d => currCoord.GetNeighbor(d)).Where(x=>x.RiverCoordToTerranCoord() == null).ToArray();
+                currCoord = vaildNexts.Where(x => !riverHashSet.Contains(x) && x.GetNeighbors().All(n => !(riverHashSet.Contains(n) && n != currCoord)))
                     .OrderBy(_ => _random.Get()).First();
 
                 if (!currCoord.IsInMap(riverMapSize))
